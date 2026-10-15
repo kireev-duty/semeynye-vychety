@@ -1,0 +1,1422 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Кому в семье заявить вычет</title>
+<meta name="description" content="Кому из супругов и за какой год заявлять налоговые вычеты на лечение, обучение, спорт, квартиру и ипотеку, чтобы семья вернула больше НДФЛ. Учитывает прогрессивную шкалу, лимиты и перенос остатка.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Кому в семье заявить налоговый вычет">
+<meta property="og:description" content="План вычетов для семьи за три прошлых года: кто что заявляет и сколько вернёт. Работает в браузере, данные никуда не отправляются.">
+<meta property="og:image" content="https://kireev-duty.github.io/semeynye-vychety/docs/screenshot.png">
+<style>
+:root {
+  --bg: #f6f7f9;
+  --surface: #ffffff;
+  --surface-2: #f0f2f5;
+  --text: #16181d;
+  --muted: #5d6470;
+  --border: #dde1e7;
+  --accent: #2557d6;
+  --accent-soft: #e6edfc;
+  --good: #137a4b;
+  --good-soft: #e3f4ec;
+  --warn-soft: #fdf1dc;
+  --bad: #b3261e;
+  --radius: 12px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111317;
+    --surface: #1a1d23;
+    --surface-2: #232730;
+    --text: #e8eaee;
+    --muted: #9aa1ad;
+    --border: #2f3440;
+    --accent: #7ea2ff;
+    --accent-soft: #1f2a45;
+    --good: #5fd09a;
+    --good-soft: #15302a;
+    --warn-soft: #362a14;
+    --bad: #ff8a80;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111317;
+  --surface: #1a1d23;
+  --surface-2: #232730;
+  --text: #e8eaee;
+  --muted: #9aa1ad;
+  --border: #2f3440;
+  --accent: #7ea2ff;
+  --accent-soft: #1f2a45;
+  --good: #5fd09a;
+  --good-soft: #15302a;
+  --warn-soft: #362a14;
+  --bad: #ff8a80;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+a { color: var(--accent); }
+.wrap { max-width: 1240px; margin: 0 auto; padding: 0 16px; }
+header.top { padding: 28px 0 8px; }
+h1 { font-size: clamp(22px, 3.2vw, 30px); line-height: 1.2; margin: 0 0 8px; letter-spacing: -0.01em; }
+.lead { margin: 0 0 14px; color: var(--muted); max-width: 820px; }
+.notice {
+  background: var(--accent-soft);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  margin: 0 0 14px;
+  max-width: 820px;
+  font-size: 14px;
+}
+.presets { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 16px; }
+.presets span { color: var(--muted); font-size: 14px; }
+button {
+  font: inherit;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  padding: 7px 12px;
+  border-radius: 999px;
+}
+button:hover { border-color: var(--accent); }
+.layout {
+  display: grid;
+  grid-template-columns: minmax(300px, 440px) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+  padding-bottom: 32px;
+}
+@media (max-width: 900px) { .layout { grid-template-columns: minmax(0, 1fr); } }
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+form.panel { position: sticky; top: 12px; max-height: calc(100vh - 24px); overflow: auto; }
+@media (max-width: 900px) { form.panel { position: static; max-height: none; } }
+fieldset { border: 0; padding: 0; margin: 0 0 20px; min-width: 0; }
+legend { font-weight: 650; font-size: 16px; margin-bottom: 8px; padding: 0; }
+.field { display: block; margin-bottom: 12px; }
+.lbl { display: block; font-size: 14px; font-weight: 550; margin-bottom: 4px; }
+.help { display: block; color: var(--muted); font-size: 12.5px; margin-top: 3px; }
+input[type="text"], select {
+  width: 100%;
+  font: inherit;
+  color: var(--text);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 7px 9px;
+  min-width: 0;
+}
+input[type="text"]:focus, select:focus { outline: 2px solid var(--accent); outline-offset: 0; border-color: transparent; }
+input[type="checkbox"] { accent-color: var(--accent); width: 16px; height: 16px; margin: 0; flex: none; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.row3 { display: grid; grid-template-columns: 0.7fr 1.6fr 1fr; gap: 8px; }
+.row3.two { grid-template-columns: 0.75fr 2.4fr; }
+.row2.wide-first { grid-template-columns: 1.6fr 1fr; }
+.row4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.row4 input[type="text"] { padding: 7px 6px; font-size: 14px; }
+@media (max-width: 480px) {
+  .row3 { grid-template-columns: 1fr 1fr; }
+  .row3 > :first-child { grid-column: 1 / -1; }
+  .row3.two { grid-template-columns: 1fr 2fr; }
+  .row3.two > :first-child { grid-column: auto; }
+}
+.chk { display: flex; gap: 8px; align-items: center; font-size: 14px; margin: 6px 0; cursor: pointer; }
+.chk.sm { font-size: 13px; margin: 2px 0; gap: 6px; }
+.seg { display: flex; gap: 0; margin-bottom: 12px; border: 1px solid var(--border); border-radius: 999px; padding: 3px; background: var(--surface-2); }
+.seg button { flex: 1; border: 0; background: transparent; padding: 6px 10px; font-size: 14px; }
+.seg button[aria-pressed="true"] { background: var(--surface); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12); font-weight: 600; }
+.item { position: relative; background: var(--surface-2); border-radius: 10px; padding: 10px 40px 10px 10px; margin-bottom: 8px; }
+.item input[type="text"], .item select { background: var(--surface); }
+.item .row2, .item .row3 { margin-bottom: 6px; }
+.item .row2:last-child, .item .row3:last-child { margin-bottom: 0; }
+.item .note { font-size: 12.5px; color: var(--bad); margin-top: 6px; }
+.x { position: absolute; top: 8px; right: 8px; width: 26px; height: 26px; padding: 0; line-height: 1; font-size: 16px; color: var(--muted); }
+.add { font-size: 14px; padding: 6px 12px; color: var(--accent); }
+.mini { font-size: 12px; color: var(--muted); display: block; margin-bottom: 2px; }
+table.grid { width: 100%; border-collapse: collapse; font-size: 14px; }
+table.grid th, table.grid td { padding: 3px 4px; text-align: left; vertical-align: middle; }
+table.grid thead th { font-size: 13px; color: var(--muted); font-weight: 550; }
+table.grid tbody th { font-weight: 550; white-space: nowrap; width: 1%; padding-right: 8px; }
+table.grid small { color: var(--muted); font-weight: 400; display: block; font-size: 11.5px; line-height: 1.1; }
+details { margin: 4px 0 12px; }
+summary { cursor: pointer; font-weight: 600; font-size: 14px; color: var(--accent); }
+details[open] summary { margin-bottom: 8px; }
+.results { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; min-width: 0; }
+.verdict { border-radius: var(--radius); padding: 18px; background: var(--good-soft); }
+.verdict.neutral { background: var(--surface-2); }
+.verdict h2 { margin: 0 0 6px; font-size: clamp(19px, 2.4vw, 24px); line-height: 1.25; }
+.verdict p { margin: 0 0 4px; }
+.verdict p:last-child { margin: 0; }
+.box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; }
+.box h3 { margin: 0 0 8px; font-size: 16px; }
+.box p { margin: 0 0 6px; }
+.box p:last-child { margin-bottom: 0; }
+.year { border-top: 1px solid var(--border); padding: 12px 0; }
+.year:first-of-type { border-top: 0; padding-top: 4px; }
+.year:last-child { padding-bottom: 0; }
+.year-head { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; flex-wrap: wrap; margin-bottom: 6px; }
+.year-head b { font-size: 16px; }
+.year-head .sum { font-weight: 650; font-variant-numeric: tabular-nums; }
+.when { color: var(--muted); font-size: 13px; font-weight: 400; margin-left: 6px; }
+.who { display: grid; grid-template-columns: minmax(90px, 140px) minmax(0, 1fr) auto; gap: 4px 12px; padding: 6px 0; font-size: 14px; align-items: baseline; }
+.who + .who { border-top: 1px dashed var(--border); }
+.who .name { font-weight: 600; overflow-wrap: anywhere; }
+.who ul { margin: 0; padding: 0; list-style: none; }
+.who li { display: flex; justify-content: space-between; gap: 10px; }
+.who li span:last-child { font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--muted); }
+.who .ret { font-weight: 650; font-variant-numeric: tabular-nums; white-space: nowrap; text-align: right; }
+.who .ret small { display: block; font-weight: 400; color: var(--muted); font-size: 12px; }
+@media (max-width: 560px) {
+  .who { grid-template-columns: minmax(0, 1fr) auto; }
+  .who ul { grid-column: 1 / -1; grid-row: 2; }
+}
+.scroll { overflow-x: auto; }
+table.years { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+table.years th, table.years td { padding: 7px 10px; border-bottom: 1px solid var(--border); text-align: right; white-space: nowrap; }
+table.years th:first-child, table.years td:first-child { text-align: left; }
+table.years thead th { color: var(--muted); font-weight: 550; font-size: 13px; }
+table.years tfoot td { font-weight: 650; border-bottom: 0; }
+.pos { color: var(--good); }
+.small { font-size: 12.5px; color: var(--muted); }
+ul.warns { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+ul.warns li { padding: 10px 12px; border-radius: 8px; background: var(--surface-2); font-size: 14px; }
+ul.warns li.warn { background: var(--warn-soft); }
+ul.docs { margin: 0; padding-left: 18px; font-size: 14px; }
+ul.docs li { margin-bottom: 3px; }
+.docs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px 20px; }
+.docs-grid h4 { margin: 0 0 4px; font-size: 14px; }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.toast { color: var(--good); font-size: 13px; align-self: center; }
+footer { border-top: 1px solid var(--border); padding: 16px 0 32px; color: var(--muted); font-size: 13px; display: flex; flex-wrap: wrap; gap: 8px 16px; justify-content: space-between; align-items: center; }
+footer p { margin: 0; }
+footer .theme button { padding: 4px 10px; font-size: 13px; }
+@media print {
+  body { background: #fff; color: #000; font-size: 12px; }
+  .presets, .actions, .notice, form.panel, footer .theme { display: none !important; }
+  .layout { display: block; }
+  .box, .verdict { border: 1px solid #bbb; break-inside: avoid; margin-bottom: 10px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>Кому в семье заявить налоговый вычет</h1>
+    <p class="lead">Супруги могут заявлять расходы на лечение и обучение детей и друг друга, а вычет за квартиру — делить. С 2025 года вычет возвращает налог по той ставке, по которой облагается доход, поэтому сумма зависит от того, кто подаёт декларацию. Калькулятор раскладывает расходы между вами по годам так, чтобы семья вернула больше и быстрее. Расчёт идёт в браузере, данные никуда не отправляются.</p>
+    <p class="notice" id="notice"></p>
+    <div class="presets"><span>Примеры:</span>
+      <button type="button" data-preset="mortgage">Ипотека и лечение</button>
+      <button type="button" data-preset="high">Высокий доход</button>
+      <button type="button" data-preset="three">Трое детей</button>
+      <button type="button" data-preset="clear">Очистить</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <form id="form" class="panel" autocomplete="off" onsubmit="return false"></form>
+    <section id="results" class="results" aria-live="polite"></section>
+  </main>
+
+  <footer>
+    <p>Ориентировочный расчёт, не налоговая консультация. Правила на октябрь 2026 года.</p>
+    <p class="theme">Тема: <button type="button" data-theme-set="">системная</button> <button type="button" data-theme-set="light">светлая</button> <button type="button" data-theme-set="dark">тёмная</button></p>
+  </footer>
+</div>
+
+<script id="core">
+(function (root) {
+  'use strict';
+
+  var EPS = 0.005;
+  var OLD_SCALE = [[5e6, 0.13], [Infinity, 0.15]];
+  var NEW_SCALE = [[2.4e6, 0.13], [5e6, 0.15], [20e6, 0.18], [50e6, 0.2], [Infinity, 0.22]];
+
+  // Правила по годам: всё, что меняется законами, живёт здесь
+  function rules(year) {
+    var y24 = year >= 2024, y25 = year >= 2025;
+    return {
+      scale: y25 ? NEW_SCALE : OLD_SCALE,
+      socialCap: y24 ? 150000 : 120000,
+      childEduCap: y24 ? 110000 : 50000,
+      spouseEdu: y24,
+      parentSport: year >= 2026,
+      gto: y25 ? 18000 : 0,
+      childStd: y25 ? [1400, 2800, 6000] : [1400, 1400, 3000],
+      childStdLimit: y25 ? 450000 : 350000,
+      childDisabled: 12000,
+      savingsCap: 400000,
+      mainCap: 2000000,
+      interestCap: 3000000
+    };
+  }
+
+  function tax(year, base) {
+    var scale = rules(year).scale, t = 0, lo = 0;
+    for (var i = 0; i < scale.length && base > lo; i++) {
+      t += (Math.min(base, scale[i][0]) - lo) * scale[i][1];
+      lo = scale[i][0];
+    }
+    return t;
+  }
+
+  // Вычет срезает доход сверху, поэтому возвращается налог по самой высокой ставке
+  function saving(year, base, d) {
+    return tax(year, base) - tax(year, Math.max(0, base - Math.max(0, d)));
+  }
+
+  // Ставка и длина слоя дохода прямо под уровнем level
+  function layer(year, level) {
+    if (level <= EPS) return { rate: 0, len: 0 };
+    var scale = rules(year).scale, lo = 0;
+    for (var i = 0; i < scale.length; i++) {
+      if (level <= scale[i][0] + EPS) return { rate: scale[i][1], len: level - lo };
+      lo = scale[i][0];
+    }
+    return { rate: 0, len: 0 };
+  }
+
+  // Ребёнок до 18 лет (весь год, в котором исполнилось 18) или очник до maxStudyAge
+  function childOk(child, year, maxStudyAge) {
+    var age = year - child.born;
+    if (age < 0) return false;
+    return age <= 18 || (child.studyUntil >= year && age < maxStudyAge);
+  }
+
+  function childStd(year, income, children) {
+    var r = rules(year);
+    var kids = (children || []).filter(function (c) { return c.born <= year; })
+      .sort(function (a, b) { return a.born - b.born; });
+    var monthly = 0;
+    kids.forEach(function (c, i) {
+      if (childOk(c, year, 24)) monthly += r.childStd[Math.min(i, 2)] + (c.disabled ? r.childDisabled : 0);
+    });
+    if (!monthly || income <= 0) return 0;
+    var months = 0;
+    for (var m = 1; m <= 12; m++) if (income * m / 12 <= r.childStdLimit + EPS) months++;
+    return monthly * months;
+  }
+
+  // Может ли человек p заявить расход e
+  function canClaim(inp, e, p) {
+    if (p > 0 && !inp.couple) return false;
+    var r = rules(e.year), w = e.who, other = 1 - p;
+    if (e.kind === 'savings') return w === 'p' + p;
+    if (w === 'p' + p) return true;
+    if (w === 'p' + other) {
+      if (!inp.couple) return false;
+      if (e.kind === 'treat' || e.kind === 'treatExp') return true;
+      return e.kind === 'edu' && r.spouseEdu && !!e.fullTime;
+    }
+    if (w.charAt(0) === 'c') {
+      var child = (inp.children || [])[+w.slice(1)];
+      return !!child && childOk(child, e.year, 24);
+    }
+    if (w === 'par' + p) return e.kind === 'treat' || e.kind === 'treatExp' || (e.kind === 'sport' && r.parentSport);
+    if (w === 'sib' + p) return e.kind === 'edu' && !!e.fullTime;
+    return false;
+  }
+
+  function poolOf(e) {
+    if (e.kind === 'treatExp') return 'free';
+    if (e.kind === 'savings') return 'savings';
+    if (e.kind === 'edu' && e.who.charAt(0) === 'c') return 'child';
+    return 'social';
+  }
+
+  function incomeOf(inp, p, y) {
+    var person = inp.people[p];
+    if (!person) return 0;
+    if (y <= inp.year) return Math.max(0, +(person.income || {})[y] || 0);
+    var last = Math.max(0, +(person.income || {})[inp.year] || 0);
+    return last * Math.pow(1 + (inp.growth || 0), y - inp.year);
+  }
+
+  function homeOf(inp) {
+    var h = inp.home;
+    if (!h || !h.on) return null;
+    if (!(h.cost > 0) && !h.started && !Object.keys(h.interest || {}).some(function (y) { return h.interest[y] > 0; })) return null;
+    return h;
+  }
+
+  function mainRange(inp, h) {
+    var lim = h.mainLimit || [2e6, 2e6];
+    var cost = Math.max(0, h.cost || 0);
+    if (!inp.couple) { var v = Math.min(lim[0], cost); return { lo: v, hi: v, cost: cost, lim: lim }; }
+    var lo = Math.max(0, cost - lim[1]), hi = Math.min(lim[0], cost);
+    if (lo > hi) lo = hi;
+    return { lo: lo, hi: hi, cost: cost, lim: lim };
+  }
+
+  function poolRoom(pr, item, ctx) {
+    if (item.pool === 'social') return pr.capRoom;
+    if (item.pool === 'savings') return pr.savRoom;
+    if (item.pool === 'child') return ctx.childRoom[item.e.who] || 0;
+    return Infinity;
+  }
+
+  function place(pr, item, amt, ctx) {
+    if (amt <= EPS) return;
+    if (item.pool === 'social') pr.capRoom -= amt;
+    if (item.pool === 'savings') pr.savRoom -= amt;
+    if (item.pool === 'child') ctx.childRoom[item.e.who] -= amt;
+    pr.used += amt;
+    pr.claims.push({ i: item.i, amount: amt });
+    item.left -= amt;
+  }
+
+  // Раскладывает расход между заявителями по убыванию ставки.
+  // reserve: true — только в базу, которую не займёт жильё (её ставка — у дна стопки вычетов);
+  // false — поверх жилья (оно переносится на следующий год)
+  function pour(y, ppl, item, ctx, reserve, prefer) {
+    var guard = 0;
+    while (item.left > EPS && guard++ < 50) {
+      var best = -1, bestRate = -1, bestSeg = 0;
+      for (var k = 0; k < item.cl.length; k++) {
+        var p = item.cl[k], pr = ppl[p];
+        var level = pr.base - pr.used - (reserve ? pr.reserve : 0);
+        var avail = Math.min(poolRoom(pr, item, ctx), level);
+        if (avail <= EPS) continue;
+        var L = reserve ? layer(y, level) : layer(y, pr.base - pr.used);
+        var rate = L.rate;
+        if (!reserve && prefer >= 0) rate = p === prefer ? 1 : 0;
+        var tie = Math.abs(rate - bestRate) < 1e-9;
+        if (rate > bestRate + 1e-9 || (tie && p === item.e.payer)) {
+          best = p; bestRate = rate; bestSeg = Math.min(avail, reserve ? L.len : avail);
+        }
+      }
+      if (best < 0) break;
+      place(ppl[best], item, Math.min(item.left, bestSeg), ctx);
+    }
+  }
+
+  function payerFirst(inp, item) {
+    var payer = inp.couple ? (item.e.payer === 1 ? 1 : 0) : 0;
+    return item.cl.indexOf(payer) >= 0 ? payer : item.cl[0];
+  }
+
+  // Проход по годам. plan: { main, years: { [год]: { policy, interest } }, mode: 'opt' | 'docs' | 'alloc', alloc }
+  function simulate(inp, plan) {
+    plan = plan || {};
+    var n = inp.couple ? 2 : 1;
+    var y0 = inp.year - 3, yEnd = inp.year + (inp.horizon == null ? 15 : inp.horizon);
+    var mode = plan.mode || 'opt';
+    var h = homeOf(inp);
+    var mainLeft = [0, 0], intCarry = [0, 0], intCap = [0, 0], pending = 0, start = Infinity, mainSplit = null;
+    if (h) {
+      start = h.started ? y0 : Math.max(h.from || y0, y0);
+      var caps = h.interestLeft || [3e6, 3e6];
+      intCap = [n > 0 ? caps[0] : 0, n > 1 ? caps[1] : 0];
+      if (h.started) {
+        mainLeft = [(h.carryMain || [])[0] || 0, n > 1 ? (h.carryMain || [])[1] || 0 : 0];
+        intCarry = [(h.carryInterest || [])[0] || 0, n > 1 ? (h.carryInterest || [])[1] || 0 : 0];
+        intCap = [Math.max(intCap[0], intCarry[0]), Math.max(intCap[1], intCarry[1])];
+      } else {
+        var rg = mainRange(inp, h);
+        var x = plan.main == null ? (rg.lo + rg.hi) / 2 : plan.main;
+        if (mode === 'docs' && n > 1) x = Math.min(rg.hi, Math.max(rg.lo, rg.cost / 2));
+        x = Math.min(rg.hi, Math.max(rg.lo, x));
+        mainLeft = [x, n > 1 ? Math.min(rg.lim[1], rg.cost - x) : 0];
+        mainSplit = mainLeft.slice();
+      }
+    }
+
+    var out = { years: [], mainSplit: mainSplit, total: 0, past: 0, current: 0, future: 0, early: 0, burnt: [], lastPropYear: null };
+    for (var y = y0; y <= yEnd; y++) {
+      var r = rules(y), ctx = { childRoom: {} };
+      var ppl = [];
+      for (var p = 0; p < n; p++) {
+        var person = inp.people[p] || {};
+        var income = incomeOf(inp, p, y);
+        var std = childStd(y, income, inp.children);
+        var missed = y <= inp.year && !!(person.stdMissed || {})[y];
+        var pr = {
+          income: income, std: std, stdMissed: missed, base: Math.max(0, income - (missed ? 0 : std)),
+          used: 0, reserve: 0, capRoom: r.socialCap, savRoom: r.savingsCap, claims: [], extra: [],
+          main: 0, interest: 0, intGot: 0
+        };
+        if (missed && std > 0) { pr.extra.push({ type: 'std', amount: std }); pr.used += std; }
+        if (y <= inp.year && r.gto && (person.gto || {})[y]) { pr.extra.push({ type: 'gto', amount: r.gto }); pr.used += r.gto; }
+        ppl.push(pr);
+      }
+
+      // Расходы года: у кого один заявитель — сразу ему, остальные распределяются
+      var flex = [];
+      if (y <= inp.year) {
+        (inp.expenses || []).forEach(function (e, i) {
+          if (e.year !== y || !(e.amount > 0)) return;
+          var cl = [];
+          for (var q = 0; q < n; q++) if (canClaim(inp, e, q)) cl.push(q);
+          var item = { e: e, i: i, cl: cl, pool: poolOf(e), left: e.amount };
+          if (item.pool === 'child' && !(e.who in ctx.childRoom)) ctx.childRoom[e.who] = r.childEduCap;
+          if (!cl.length) { out.burnt.push({ year: y, i: i, amount: e.amount, reason: 'rule' }); return; }
+          flex.push(item);
+        });
+        var order = { social: 0, savings: 0, child: 1, free: 2 };
+        flex.sort(function (a, b) { return (a.cl.length - b.cl.length) || (order[a.pool] - order[b.pool]) || (a.i - b.i); });
+      }
+
+      // Жильё: сколько вычета ждёт своей очереди у каждого
+      var intYear = 0;
+      if (h) {
+        if (y <= inp.year) intYear = Math.max(0, +(h.interest || {})[y] || 0);
+        else if (y >= start) intYear = Math.max(0, h.interestFuture || 0);
+      }
+      if (y < start) { pending += intYear; intYear = 0; }
+      else { intYear += pending; pending = 0; }
+
+      var dec = (plan.years || {})[y] || {};
+      // Сначала расходы с единственным заявителем — они занимают лимиты первыми
+      flex.forEach(function (item) {
+        if (item.cl.length === 1) {
+          var pr1 = ppl[item.cl[0]];
+          place(pr1, item, Math.min(item.left, poolRoom(pr1, item, ctx)), ctx);
+        }
+      });
+
+      // Проценты года: кому сколько
+      var share = [0, 0];
+      if (intYear > 0) {
+        var s = dec.interest;
+        if (mode === 'docs') s = 0.5;
+        if (n === 1) s = 1;
+        if (s == null || s === 'auto') {
+          var f0 = ppl[0].base - ppl[0].used - mainLeft[0] - intCarry[0];
+          var f1 = ppl[1].base - ppl[1].used - mainLeft[1] - intCarry[1];
+          s = f0 >= f1 ? 'fill0' : 'fill1';
+        }
+        if (s === 'fill0' || s === 'fill1') {
+          var a = s === 'fill0' ? 0 : 1;
+          var free = Math.max(0, ppl[a].base - ppl[a].used - (y >= start ? mainLeft[a] : 0) - intCarry[a]);
+          share[a] = Math.min(intYear, free);
+          share[1 - a] = intYear - share[a];
+        } else {
+          share[0] = intYear * s;
+          share[1] = intYear - share[0];
+        }
+        for (var t = 0; t < n; t++) {
+          var room = Math.max(0, intCap[t] - intCarry[t]);
+          if (share[t] > room) { if (n > 1) share[1 - t] += share[t] - room; share[t] = room; }
+        }
+        for (var t2 = 0; t2 < n; t2++) {
+          var room2 = Math.max(0, intCap[t2] - intCarry[t2]);
+          share[t2] = Math.min(share[t2], room2);
+          intCarry[t2] += share[t2];
+          ppl[t2].intGot = share[t2];
+        }
+      }
+      for (var p2 = 0; p2 < n; p2++) ppl[p2].reserve = (y >= start ? mainLeft[p2] : 0) + intCarry[p2];
+
+      // Распределяемые соцвычеты
+      flex.forEach(function (item) {
+        if (item.cl.length < 2 || item.left <= EPS) return;
+        if (mode === 'docs' || mode === 'alloc') {
+          var first = mode === 'docs' ? payerFirst(inp, item) : 0;
+          var amt0 = mode === 'alloc' ? item.left * ((plan.alloc || {})[item.i] == null ? 1 : plan.alloc[item.i]) : item.left;
+          var prA = ppl[first], prB = ppl[1 - first];
+          place(prA, item, Math.min(amt0, poolRoom(prA, item, ctx)), ctx);
+          place(prB, item, Math.min(item.left, poolRoom(prB, item, ctx)), ctx);
+          return;
+        }
+        // Стратегии 0–2: сначала в свободную базу; 3–5: сразу поверх жилья (оно уйдёт на годы с другой ставкой)
+        if ((dec.policy || 0) < 3) pour(y, ppl, item, ctx, true, -1);
+      });
+      if (mode === 'opt') {
+        var prefer = [-1, 0, 1, 0, 1, -1][dec.policy || 0];
+        flex.forEach(function (item) { if (item.cl.length > 1) pour(y, ppl, item, ctx, false, prefer); });
+      }
+      flex.forEach(function (item) {
+        if (item.left > EPS) {
+          var limited = item.cl.every(function (q) { return poolRoom(ppl[q], item, ctx) <= EPS; });
+          out.burnt.push({ year: y, i: item.i, amount: item.left, reason: limited ? 'limit' : 'tax' });
+        }
+      });
+
+      // Жильё: вычет обязателен в пределах базы, остаток переходит дальше
+      var yr = { year: y, kind: y < inp.year ? 'past' : y === inp.year ? 'current' : 'future', people: [], refund: 0 };
+      for (var p3 = 0; p3 < n; p3++) {
+        var pr3 = ppl[p3];
+        var avail = Math.max(0, pr3.base - pr3.used);
+        var m = y >= start ? Math.min(mainLeft[p3], avail) : 0;
+        mainLeft[p3] -= m; avail -= m;
+        var it = Math.min(intCarry[p3], avail);
+        intCarry[p3] -= it; intCap[p3] -= it;
+        pr3.main = m; pr3.interest = it;
+        var ded = pr3.used + m + it;
+        var refund = saving(y, pr3.base, ded);
+        var top = layer(y, pr3.base).rate, bottom = layer(y, Math.max(0, pr3.base - ded) + 1).rate;
+        yr.people.push({
+          income: pr3.income, base: pr3.base, std: pr3.std, stdMissed: pr3.stdMissed,
+          extra: pr3.extra, claims: pr3.claims, social: pr3.used, main: m, interest: it, intGot: pr3.intGot, ded: ded,
+          wasted: Math.max(0, ded - pr3.base), refund: refund, rateTop: top, rateBottom: ded > EPS ? bottom : top,
+          mainLeft: mainLeft[p3], intCarry: intCarry[p3]
+        });
+        yr.refund += refund;
+        if (m + it > EPS) out.lastPropYear = y;
+      }
+      out.years.push(yr);
+      out.total += yr.refund;
+      out[yr.kind] += yr.refund;
+      out.early += yr.refund * (yEnd + 1 - y);
+    }
+    out.mainLeftEnd = mainLeft.slice(0, n);
+    out.intCarryEnd = intCarry.slice(0, n);
+    return out;
+  }
+
+  function better(a, b) {
+    if (a.total > b.total + 0.5) return true;
+    if (a.total < b.total - 0.5) return false;
+    return a.early > b.early + 0.5;
+  }
+
+  function mainCandidates(inp) {
+    var h = homeOf(inp);
+    if (!h || h.started) return [null];
+    var rg = mainRange(inp, h);
+    if (rg.hi - rg.lo < 1) return [rg.lo];
+    var set = [rg.lo, rg.hi, rg.cost / 2];
+    for (var k = 1; k < 40; k++) set.push(rg.lo + (rg.hi - rg.lo) * k / 40);
+    // Точки, где доля укладывается в доход за годы, которые можно заявить
+    var cap = [0, 0];
+    var from = Math.max(h.from || 0, inp.year - 3);
+    for (var y = from; y <= inp.year + 3; y++) {
+      cap[0] += Math.max(0, incomeOf(inp, 0, y) - childStd(y, incomeOf(inp, 0, y), inp.children));
+      cap[1] += Math.max(0, incomeOf(inp, 1, y) - childStd(y, incomeOf(inp, 1, y), inp.children));
+      set.push(cap[0], rg.cost - cap[1]);
+    }
+    return set.filter(function (v) { return v >= rg.lo - EPS && v <= rg.hi + EPS; })
+      .map(function (v) { return Math.round(Math.min(rg.hi, Math.max(rg.lo, v))); })
+      .filter(function (v, i, arr) { return arr.indexOf(v) === i; });
+  }
+
+  function decisionOptions(inp, y) {
+    if (!inp.couple) return [{}];
+    var h = homeOf(inp);
+    var hasInterest = !!h && (y > inp.year ? h.interestFuture > 0 : Object.keys(h.interest || {}).some(function (k) { return +k <= y && h.interest[k] > 0; }));
+    var hasFlex = (inp.expenses || []).some(function (e) { return e.year === y && e.amount > 0 && canClaim(inp, e, 0) && canClaim(inp, e, 1); });
+    var policies = hasFlex ? (h ? [0, 1, 2, 3, 4, 5] : [0, 1, 2]) : [0];
+    var shares = hasInterest ? [0, 0.25, 0.5, 0.75, 1, 'fill0', 'fill1'] : ['auto'];
+    var opts = [];
+    policies.forEach(function (pol) { shares.forEach(function (s) { opts.push({ policy: pol, interest: s }); }); });
+    return opts;
+  }
+
+  function optimize(inp) {
+    var years = [];
+    for (var y = inp.year - 3; y <= inp.year; y++) years.push(y);
+    var best = null;
+    var tryMain = function (x) {
+      var plan = { main: x, years: {} };
+      for (var pass = 0; pass < 2; pass++) {
+        years.forEach(function (yy) {
+          var opts = decisionOptions(inp, yy);
+          if (opts.length < 2) return;
+          var bestOpt = null, bestSim = null;
+          opts.forEach(function (o) {
+            plan.years[yy] = o;
+            var sim = simulate(inp, plan);
+            if (!bestSim || better(sim, bestSim)) { bestSim = sim; bestOpt = o; }
+          });
+          plan.years[yy] = bestOpt;
+        });
+      }
+      var sim = simulate(inp, plan);
+      if (!best || better(sim, best.sim)) best = { plan: JSON.parse(JSON.stringify(plan)), sim: sim };
+    };
+    var mains = mainCandidates(inp);
+    mains.forEach(tryMain);
+    // Уточнение доли основного вычета вокруг лучшей точки
+    if (mains.length > 2 && best.plan.main != null) {
+      var rg = mainRange(inp, homeOf(inp));
+      var step = (rg.hi - rg.lo) / 40;
+      for (var k = -9; k <= 9; k++) {
+        var x = Math.round(best.plan.main + step * k / 10);
+        if (x >= rg.lo && x <= rg.hi) tryMain(x);
+      }
+    }
+    return best;
+  }
+
+  function compare(inp) {
+    var opt = optimize(inp);
+    var docs = simulate(inp, { mode: 'docs' });
+    return { opt: opt.sim, plan: opt.plan, docs: docs, gain: opt.sim.total - docs.total };
+  }
+
+  // Ежегодная семейная выплата (179-ФЗ): НДФЛ без вычетов минус 6% того же дохода, каждому работающему родителю
+  function familyPayment(inp, y, pm, otherIncome) {
+    var n = inp.couple ? 2 : 1, app = y + 1;
+    var kids = (inp.children || []).filter(function (c) {
+      var age = app - c.born;
+      return age >= 0 && (age < 18 || (c.studyUntil >= app && age < 23));
+    }).length;
+    var incomes = [];
+    for (var p = 0; p < n; p++) incomes.push(incomeOf(inp, p, y));
+    var members = n + kids;
+    var total = incomes.reduce(function (s, v) { return s + v; }, 0) + Math.max(0, otherIncome || 0);
+    var perCapita = total / 12 / members;
+    var parts = incomes.map(function (v) { return v > 0 ? Math.max(0, tax(y, v) - 0.06 * v) : 0; });
+    return {
+      year: y, applyYear: app, kids: kids, members: members, perCapita: perCapita,
+      limit: pm > 0 ? 1.5 * pm : null, kidsOk: kids >= 2, incomeOk: pm > 0 ? perCapita <= 1.5 * pm + EPS : null,
+      parts: parts, total: parts.reduce(function (s, v) { return s + v; }, 0)
+    };
+  }
+
+  root.DeductCore = {
+    rules: rules,
+    tax: tax,
+    saving: saving,
+    layer: layer,
+    childOk: childOk,
+    childStd: childStd,
+    canClaim: canClaim,
+    incomeOf: incomeOf,
+    simulate: simulate,
+    optimize: optimize,
+    compare: compare,
+    familyPayment: familyPayment
+  };
+})(typeof window !== 'undefined' ? window : globalThis);
+</script>
+
+<script>
+(function () {
+  'use strict';
+  var Core = window.DeductCore;
+  var STORE_KEY = 'semeynye-vychety-v1';
+  var NOW = new Date();
+  var Y = NOW.getFullYear();
+  var Y0 = Y - 3;
+  var YEARS = [Y0, Y0 + 1, Y0 + 2, Y];
+
+  var KINDS = [
+    ['treat', 'Лечение и лекарства'],
+    ['treatExp', 'Дорогостоящее лечение'],
+    ['edu', 'Обучение'],
+    ['sport', 'Спорт и фитнес'],
+    ['savings', 'Взносы на ИИС или ПДС']
+  ];
+  var KIND_SHORT = { treat: 'лечение', treatExp: 'дорогостоящее лечение', edu: 'обучение', sport: 'спорт', savings: 'ИИС / ПДС' };
+
+  function byYear(v) { var o = {}; YEARS.forEach(function (y) { o[y] = typeof v === 'function' ? v(y) : v; }); return o; }
+  function list(arr) { var o = {}; YEARS.forEach(function (y, i) { o[y] = arr[i] || 0; }); return o; }
+
+  function blank() {
+    return {
+      couple: true,
+      names: ['Вы', 'Супруг(а)'],
+      kids: [],
+      inc: [byYear(0), byYear(0)],
+      miss: [byYear(false), byYear(false)],
+      gto: [byYear(false), byYear(false)],
+      growth: 0,
+      exp: [],
+      home: { on: false, started: false, from: Y - 1, cost: 0, int: byYear(0), fut: 0, lim: [2000000, 2000000], intUsed: [false, false], cm: [0, 0], ci: [0, 0] },
+      pm: 0,
+      other: 0
+    };
+  }
+
+  // Пресеты задаются относительно текущего года: k = 0 — самый ранний год, который ещё можно заявить
+  function e(k, kind, who, a, pay, ft) { return { y: Y0 + k, k: kind, w: who, a: a, pay: pay, ft: !!ft }; }
+  var PRESETS = {
+    mortgage: function () {
+      var s = blank();
+      s.kids = [{ born: Y - 10, study: 0, dis: false }, { born: Y - 6, study: 0, dis: false }];
+      s.inc = [list([1400000, 1500000, 1650000, 1750000]), list([700000, 0, 420000, 800000])];
+      s.exp = [e(1, 'treat', 'c1', 85000, 1), e(2, 'treat', 'p1', 140000, 1), e(2, 'edu', 'c0', 120000, 1), e(2, 'sport', 'c0', 36000, 0)];
+      s.home = { on: true, started: false, from: Y0 + 1, cost: 6500000, int: list([0, 420000, 610000, 590000]), fut: 560000, lim: [2000000, 2000000], intUsed: [false, false], cm: [0, 0], ci: [0, 0] };
+      return s;
+    },
+    high: function () {
+      var s = blank();
+      s.kids = [{ born: Y - 19, study: Y + 2, dis: false }, { born: Y - 13, study: 0, dis: false }];
+      s.inc = [list([3200000, 3600000, 4200000, 4500000]), list([1100000, 1150000, 1200000, 1250000])];
+      s.exp = [e(0, 'treat', 'c1', 70000, 1), e(1, 'edu', 'c0', 180000, 1), e(2, 'edu', 'c0', 200000, 1), e(2, 'treatExp', 'p1', 450000, 1), e(2, 'treat', 'p0', 60000, 0), e(2, 'savings', 'p0', 400000, 0)];
+      return s;
+    },
+    three: function () {
+      var s = blank();
+      s.kids = [{ born: Y - 14, study: 0, dis: false }, { born: Y - 10, study: 0, dis: false }, { born: Y - 5, study: 0, dis: false }];
+      s.inc = [list([850000, 880000, 900000, 950000]), list([450000, 500000, 550000, 600000])];
+      s.miss[1][Y0 + 1] = true;
+      s.miss[1][Y0 + 2] = true;
+      s.gto[0][Y0 + 2] = true;
+      s.exp = [e(0, 'treat', 'c2', 60000, 1), e(1, 'edu', 'c0', 75000, 0), e(2, 'sport', 'c1', 30000, 1), e(2, 'treat', 'c2', 45000, 1)];
+      s.pm = 18000;
+      return s;
+    },
+    clear: blank
+  };
+
+  var form = document.getElementById('form');
+  var resultsEl = document.getElementById('results');
+  var nf = new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 0 });
+  var S = PRESETS.mortgage();
+
+  function rub(n) { return nf.format(Math.round(n)) + ' ₽'; }
+  function num(n) { return nf.format(Math.round(n)); }
+  function pct(r) { return Math.round(r * 100) + '%'; }
+  function parseNum(s) {
+    var v = parseFloat(String(s).replace(/[\s  ]/g, '').replace(',', '.'));
+    return isFinite(v) ? v : 0;
+  }
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (ch) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch];
+    });
+  }
+  function nm(p) { return (S.names[p] || '').trim() || (p ? 'Супруг(а)' : 'Вы'); }
+  function n() { return S.couple ? 2 : 1; }
+
+  // --- Доступ к состоянию по пути "inc.0.2025" ---
+  function getPath(path) {
+    return path.split('.').reduce(function (o, k) { return o == null ? o : o[k]; }, S);
+  }
+  function setPath(path, val) {
+    var keys = path.split('.'), o = S;
+    for (var i = 0; i < keys.length - 1; i++) o = o[keys[i]];
+    o[keys[keys.length - 1]] = val;
+  }
+
+  function whoLabel(w) {
+    if (w === 'p0') return nm(0);
+    if (w === 'p1') return nm(1);
+    if (w.charAt(0) === 'c') {
+      var i = +w.slice(1), k = S.kids[i];
+      return 'ребёнок ' + (i + 1) + (k && k.born ? ' (' + k.born + ')' : '');
+    }
+    if (w.slice(0, 3) === 'par') return 'родитель: ' + nm(+w.slice(3));
+    if (w.slice(0, 3) === 'sib') return 'брат или сестра: ' + nm(+w.slice(3));
+    return w;
+  }
+  function whoOptions(kind) {
+    var o = [['p0', nm(0)]];
+    if (S.couple) o.push(['p1', nm(1)]);
+    if (kind === 'savings') return o;
+    S.kids.forEach(function (k, i) { o.push(['c' + i, whoLabel('c' + i)]); });
+    if (kind !== 'edu') {
+      o.push(['par0', S.couple ? 'родитель: ' + nm(0) : 'ваш родитель']);
+      if (S.couple) o.push(['par1', 'родитель: ' + nm(1)]);
+    }
+    if (kind === 'edu') {
+      o.push(['sib0', S.couple ? 'брат или сестра: ' + nm(0) : 'ваш брат или сестра']);
+      if (S.couple) o.push(['sib1', 'брат или сестра: ' + nm(1)]);
+    }
+    return o;
+  }
+  function itemLabel(ex) { return KIND_SHORT[ex.k] + ' · ' + whoLabel(ex.w); }
+
+  // --- Форма ---
+  function opt(v, label, cur) { return '<option value="' + esc(v) + '"' + (String(v) === String(cur) ? ' selected' : '') + '>' + esc(label) + '</option>'; }
+  function money(path, extra) { return '<input type="text" inputmode="numeric" data-path="' + path + '" data-kind="money" value="' + (getPath(path) ? num(getPath(path)) : '') + '"' + (extra || '') + '>'; }
+  function intIn(path, ph) { var v = getPath(path); return '<input type="text" inputmode="numeric" maxlength="4" data-path="' + path + '" data-kind="int" placeholder="' + esc(ph || '') + '" value="' + (v ? v : '') + '">'; }
+  function chk(path, label, cls, struct) { return '<label class="chk' + (cls ? ' ' + cls : '') + '"><input type="checkbox" data-path="' + path + '" data-kind="bool"' + (struct ? ' data-struct="1"' : '') + (getPath(path) ? ' checked' : '') + '><span>' + label + '</span></label>'; }
+
+  function renderForm() {
+    var active = document.activeElement && document.activeElement.dataset ? document.activeElement.dataset.path : null;
+    var h = '';
+    var two = S.couple;
+
+    h += '<fieldset><legend>Семья</legend>';
+    h += '<div class="seg" role="group" aria-label="Для кого считаем">' +
+      '<button type="button" data-act="couple" data-v="1" aria-pressed="' + two + '">Супруги</button>' +
+      '<button type="button" data-act="couple" data-v="0" aria-pressed="' + !two + '">Один человек</button></div>';
+    if (two) {
+      h += '<div class="row2"><label class="field"><span class="lbl">Первый</span><input type="text" data-path="names.0" data-kind="text" data-struct="1" maxlength="20" value="' + esc(S.names[0]) + '"></label>' +
+        '<label class="field"><span class="lbl">Второй</span><input type="text" data-path="names.1" data-kind="text" data-struct="1" maxlength="20" value="' + esc(S.names[1]) + '"></label></div>';
+    }
+    h += '<span class="lbl">Дети</span>';
+    S.kids.forEach(function (k, i) {
+      h += '<div class="item"><div class="row2">' +
+        '<label><span class="mini">Ребёнок ' + (i + 1) + ': год рождения</span>' + intIn('kids.' + i + '.born', 'например, 2015') + '</label>' +
+        '<label><span class="mini">Учится очно до (год)</span>' + intIn('kids.' + i + '.study', 'если старше 18') + '</label></div>' +
+        chk('kids.' + i + '.dis', 'Инвалидность', 'sm') +
+        '<button type="button" class="x" data-act="delKid" data-i="' + i + '" aria-label="Удалить ребёнка">×</button></div>';
+    });
+    h += '<button type="button" class="add" data-act="addKid">+ Ребёнок</button>';
+    h += '<span class="help">Дети до 18 лет и очники до 24 лет дают право на вычеты за их лечение, обучение и спорт и на стандартный вычет.</span>';
+    h += '</fieldset>';
+
+    h += '<fieldset><legend>Доходы, облагаемые НДФЛ, ₽</legend>';
+    h += '<table class="grid"><thead><tr><th></th><th>' + esc(nm(0)) + '</th>' + (two ? '<th>' + esc(nm(1)) + '</th>' : '') + '</tr></thead><tbody>';
+    YEARS.forEach(function (y) {
+      h += '<tr><th>' + y + (y === Y ? '<small>оценка</small>' : '') + '</th><td>' + money('inc.0.' + y) + '</td>' + (two ? '<td>' + money('inc.1.' + y) + '</td>' : '') + '</tr>';
+    });
+    h += '</tbody></table>';
+    h += '<span class="help">До вычета налога: зарплата, договоры подряда, сдача жилья. Без процентов по вкладам, дивидендов и ценных бумаг: вычеты к ним не применяются. Самозанятым и ИП на упрощёнке — 0. Точные суммы есть в справке о доходах на Госуслугах или в личном кабинете ФНС.</span>';
+    h += '<details' + (anyFlag() ? ' open' : '') + '><summary>Детский вычет на работе и ГТО</summary>';
+    h += '<table class="grid"><thead><tr><th></th><th>' + esc(nm(0)) + '</th>' + (two ? '<th>' + esc(nm(1)) + '</th>' : '') + '</tr></thead><tbody>';
+    YEARS.forEach(function (y) {
+      var cell = function (p) {
+        return '<td>' + chk('miss.' + p + '.' + y, 'не давали детский', 'sm') + (Core.rules(y).gto ? chk('gto.' + p + '.' + y, 'ГТО', 'sm') : '') + '</td>';
+      };
+      h += '<tr><th>' + y + '</th>' + cell(0) + (two ? cell(1) : '') + '</tr>';
+    });
+    h += '</tbody></table><span class="help">«Не давали детский» — если работодатель не уменьшал налог на стандартный вычет на детей; его вернут по декларации. «ГТО» — если в этом году сдали нормативы, получили знак и прошли диспансеризацию (вычет 18 000 ₽ с 2025 года).</span></details>';
+    h += '</fieldset>';
+
+    h += '<fieldset><legend>Расходы</legend>';
+    S.exp.forEach(function (ex, i) {
+      var p = 'exp.' + i;
+      var yopts = YEARS.map(function (y) { return opt(y, y, ex.y); }).join('');
+      var kopts = KINDS.map(function (k) { return opt(k[0], k[1], ex.k); }).join('');
+      var wopts = whoOptions(ex.k).map(function (o) { return opt(o[0], o[1], ex.w); }).join('');
+      h += '<div class="item"><div class="row2 wide-first">' +
+        '<label><span class="mini">Что оплатили</span><select data-path="' + p + '.k" data-kind="text" data-struct="1">' + kopts + '</select></label>' +
+        '<label><span class="mini">Сумма, ₽</span>' + money(p + '.a') + '</label></div>' +
+        '<div class="row3' + (two ? '' : ' two') + '"><label><span class="mini">Год оплаты</span><select data-path="' + p + '.y" data-kind="int" data-struct="1">' + yopts + '</select></label>' +
+        '<label><span class="mini">За кого</span><select data-path="' + p + '.w" data-kind="text" data-struct="1">' + wopts + '</select></label>' +
+        (two ? '<label><span class="mini">Платил по документам</span><select data-path="' + p + '.pay" data-kind="int">' + opt(0, nm(0), ex.pay) + opt(1, nm(1), ex.pay) + '</select></label>' : '') + '</div>';
+      var needFt = ex.k === 'edu' && (ex.w === 'p1' || ex.w === 'p0' && two || ex.w.slice(0, 3) === 'sib');
+      if (needFt) h += chk(p + '.ft', 'Очная форма обучения', 'sm', true);
+      var why = whyNot(ex);
+      if (why) h += '<div class="note">' + esc(why) + '</div>';
+      h += '<button type="button" class="x" data-act="delExp" data-i="' + i + '" aria-label="Удалить расход">×</button></div>';
+    });
+    h += '<button type="button" class="add" data-act="addExp">+ Расход</button>';
+    h += '<span class="help">Указывайте суммы, оплаченные в этом году. Супруги могут заявлять расходы друг друга и детей, даже если документы оформлены на другого: клиника или вуз выдадут справку об оплате на того, кто будет заявлять.</span>';
+    h += '</fieldset>';
+
+    var hm = S.home;
+    h += '<fieldset><legend>Жильё</legend>';
+    h += chk('home.on', 'Покупали жильё или платите ипотеку', '', true);
+    if (hm.on) {
+      h += chk('home.started', 'Вычет за это жильё уже получаете с прошлых лет', '', true);
+      if (!hm.started) {
+        var fopts = '';
+        for (var y = Y - 12; y <= Y; y++) fopts += opt(y, y, hm.from);
+        h += '<div class="row2"><label class="field"><span class="lbl">Право на вычет с года</span><select data-path="home.from" data-kind="int">' + fopts + '</select>' +
+          '<span class="help">Год регистрации собственности, для новостройки — акта приёма-передачи</span></label>' +
+          '<label class="field"><span class="lbl">Расходы на покупку, ₽</span>' + money('home.cost') + '<span class="help">Цена по договору, включая ипотечные деньги</span></label></div>';
+        h += '<table class="grid"><thead><tr><th></th><th>' + esc(nm(0)) + '</th>' + (two ? '<th>' + esc(nm(1)) + '</th>' : '') + '</tr></thead><tbody>' +
+          '<tr><th>Лимит основного<small>из 2 млн</small></th><td>' + money('home.lim.0') + '</td>' + (two ? '<td>' + money('home.lim.1') + '</td>' : '') + '</tr>' +
+          '<tr><th>Проценты</th><td>' + chk('home.intUsed.0', 'уже получали', 'sm') + '</td>' + (two ? '<td>' + chk('home.intUsed.1', 'уже получали', 'sm') + '</td>' : '') + '</tr>' +
+          '</tbody></table><span class="help">Если основной вычет уже получали за другое жильё, впишите остаток лимита (0 — если использовали полностью). Вычет по процентам дают один раз в жизни.</span>';
+      } else {
+        h += '<table class="grid"><thead><tr><th>Остаток на 1 января ' + Y0 + '</th><th>' + esc(nm(0)) + '</th>' + (two ? '<th>' + esc(nm(1)) + '</th>' : '') + '</tr></thead><tbody>' +
+          '<tr><th>Основной вычет</th><td>' + money('home.cm.0') + '</td>' + (two ? '<td>' + money('home.cm.1') + '</td>' : '') + '</tr>' +
+          '<tr><th>Проценты</th><td>' + money('home.ci.0') + '</td>' + (two ? '<td>' + money('home.ci.1') + '</td>' : '') + '</tr>' +
+          '</tbody></table><span class="help">Возьмите из декларации за ' + (Y0 - 1) + ' год: остаток вычета, переходящий на следующий год.</span>';
+      }
+      h += '<span class="lbl" style="margin-top:10px">Проценты по ипотеке, уплаченные за год, ₽</span><div class="row4">';
+      YEARS.forEach(function (y) { h += '<label><span class="mini">' + y + '</span>' + money('home.int.' + y) + '</label>'; });
+      h += '</div><label class="field" style="margin-top:8px"><span class="lbl">Проценты в следующие годы, ₽ в год</span>' + money('home.fut') + '<span class="help">Для прогноза, когда закончится остаток вычета. Есть в графике платежей.</span></label>';
+    }
+    h += '<label class="field"><span class="lbl">Рост дохода после ' + Y + ' года, % в год</span><input type="text" inputmode="decimal" data-path="growth" data-kind="num" value="' + String(S.growth).replace('.', ',') + '"><span class="help">Нужен, только чтобы прикинуть, когда вернётся остаток вычета за жильё</span></label>';
+    h += '</fieldset>';
+
+    h += '<fieldset><legend>Семейная выплата</legend>';
+    h += '<div class="row2"><label class="field"><span class="lbl">Прожиточный минимум на человека в регионе, ₽</span>' + money('pm') + '</label>' +
+      '<label class="field"><span class="lbl">Другие доходы семьи за год, ₽</span>' + money('other') + '<span class="help">Пенсии, пособия, стипендии, алименты</span></label></div>';
+    h += '<span class="help">Нужно для проверки права на ежегодную семейную выплату для семей с двумя и более детьми. Прожиточный минимум публикует правительство региона.</span>';
+    h += '</fieldset>';
+
+    form.innerHTML = h;
+    if (active) {
+      var el = form.querySelector('[data-path="' + active + '"]');
+      if (el) el.focus();
+    }
+  }
+
+  function anyFlag() {
+    return [0, 1].some(function (p) { return YEARS.some(function (y) { return S.miss[p][y] || S.gto[p][y]; }); });
+  }
+
+  function whyNot(ex) {
+    var inp = toInput();
+    var e = toExp(ex);
+    e.amount = 1;
+    var ok = false;
+    for (var p = 0; p < n(); p++) if (Core.canClaim(inp, e, p)) ok = true;
+    if (ok) return '';
+    var w = ex.w;
+    var spouse = w === 'p1' || (w === 'p0' && S.couple);
+    if (ex.k === 'sport' && w.slice(0, 3) === 'par') return 'Спорт родителей принимают к вычету с 2026 года, если они пенсионеры.';
+    if (ex.k === 'sport') return 'Спорт супруга к вычету не принимают: только свой, детей и родителей-пенсионеров (с 2026 года).';
+    if (ex.k === 'edu' && w.slice(0, 3) === 'sib') return 'Обучение брата или сестры принимают только очное, до 24 лет.';
+    if (ex.k === 'edu' && spouse && ex.y < 2024) return 'Обучение супруга принимают к вычету с 2024 года.';
+    if (ex.k === 'edu' && spouse) return 'Обучение супруга принимают только очное.';
+    if (w.charAt(0) === 'c') return 'Ребёнку больше 18 лет, и он не учится очно: такие расходы к вычету не принимают.';
+    return 'Этот расход нельзя заявить.';
+  }
+
+  // --- Данные для ядра ---
+  function toExp(ex) { return { year: +ex.y, kind: ex.k, who: ex.w, amount: +ex.a || 0, payer: S.couple ? +ex.pay || 0 : 0, fullTime: !!ex.ft }; }
+  function toInput() {
+    var h = S.home;
+    return {
+      year: Y,
+      horizon: 15,
+      couple: S.couple,
+      growth: (+S.growth || 0) / 100,
+      children: S.kids.map(function (k) { return { born: +k.born || 9999, studyUntil: +k.study || 0, disabled: !!k.dis }; }),
+      people: [0, 1].map(function (p) { return { income: S.inc[p], stdMissed: S.miss[p], gto: S.gto[p] }; }),
+      expenses: S.exp.map(toExp),
+      home: h.on ? {
+        on: true, started: !!h.started, from: +h.from, cost: +h.cost || 0, interest: h.int, interestFuture: +h.fut || 0,
+        mainLimit: [Math.min(2e6, +h.lim[0] || 0), Math.min(2e6, +h.lim[1] || 0)],
+        interestLeft: [h.intUsed[0] ? 0 : 3e6, h.intUsed[1] ? 0 : 3e6],
+        carryMain: [+h.cm[0] || 0, +h.cm[1] || 0], carryInterest: [+h.ci[0] || 0, +h.ci[1] || 0]
+      } : null
+    };
+  }
+
+  // --- Результат ---
+  function claimsOf(pp) {
+    var by = {}, order = [];
+    pp.claims.forEach(function (c) {
+      if (!(c.i in by)) { by[c.i] = 0; order.push(c.i); }
+      by[c.i] += c.amount;
+    });
+    var lines = order.map(function (i) { return [itemLabel(S.exp[i]), by[i]]; });
+    pp.extra.forEach(function (x) { lines.push([x.type === 'std' ? 'детский вычет' : 'ГТО', x.amount]); });
+    if (pp.main > 0.5) lines.push(['жильё', pp.main]);
+    if (pp.interest > 0.5) lines.push(['проценты по ипотеке', pp.interest]);
+    return lines.filter(function (l) { return l[1] >= 0.5; });
+  }
+
+  function rateText(pp) {
+    if (pp.refund < 0.5) return '';
+    if (Math.abs(pp.rateTop - pp.rateBottom) < 1e-9) return 'по ' + pct(pp.rateTop);
+    return 'по ' + pct(pp.rateBottom) + '–' + pct(pp.rateTop);
+  }
+
+  function whenText(yr) {
+    if (yr.kind === 'past') return 'подать до 31 декабря ' + (yr.year + 3);
+    if (yr.kind === 'current') return 'подать в ' + (yr.year + 1) + ' году';
+    return 'прогноз';
+  }
+
+  function yearBlock(yr, docsYr) {
+    var people = yr.people.map(function (pp, p) { return { pp: pp, p: p, lines: claimsOf(pp) }; })
+      .filter(function (x) { return x.lines.length || x.pp.refund >= 0.5; });
+    var h = '<div class="year"><div class="year-head"><b>' + yr.year + '<span class="when">' + whenText(yr) + '</span></b>' +
+      '<span class="sum">' + rub(yr.refund) + '</span></div>';
+    if (!people.length) return h + '<p class="small">Заявлять нечего.</p></div>';
+    people.forEach(function (x) {
+      h += '<div class="who"><span class="name">' + esc(nm(x.p)) + '</span><ul>' +
+        x.lines.map(function (l) { return '<li><span>' + esc(l[0]) + '</span><span>' + num(l[1]) + '</span></li>'; }).join('') +
+        '</ul><span class="ret">' + rub(x.pp.refund) + '<small>' + rateText(x.pp) + '</small></span></div>';
+    });
+    if (S.couple && docsYr && Math.abs(docsYr.refund - yr.refund) >= 1) {
+      h += '<p class="small">По документам: ' + rub(docsYr.refund) + '</p>';
+    }
+    return h + '</div>';
+  }
+
+  function homeBox(c) {
+    var o = c.opt, h = S.home;
+    if (!h.on) return '';
+    var rows = o.years.filter(function (yr) { return yr.people.some(function (pp) { return pp.main + pp.interest > 0.5 || pp.intGot > 0.5; }); });
+    var html = '<div class="box"><h3>Жильё</h3>';
+    if (o.mainSplit && S.couple) {
+      html += '<p>Основной вычет: <b>' + esc(nm(0)) + ' — ' + rub(o.mainSplit[0]) + '</b>, <b>' + esc(nm(1)) + ' — ' + rub(o.mainSplit[1]) + '</b>. ' +
+        'Укажите эти суммы в заявлении о распределении расходов вместе с первой декларацией. Поменять доли потом нельзя.</p>';
+    } else if (o.mainSplit) {
+      html += '<p>Основной вычет: ' + rub(o.mainSplit[0]) + '.</p>';
+    }
+    var intRows = o.years.filter(function (yr) { return yr.people.some(function (pp) { return pp.intGot > 0.5; }); });
+    if (S.couple && intRows.length) {
+      html += '<p>Проценты по ипотеке супруги делят каждый год заново: ' + intRows.filter(function (yr) { return yr.kind !== 'future'; }).map(function (yr) {
+        return yr.year + ' — ' + yr.people.map(function (pp, p) { return esc(nm(p)) + ' ' + num(pp.intGot); }).join(', ');
+      }).join('; ') + '.</p>';
+    }
+    var table = function (list) {
+      var t = '<div class="scroll"><table class="years"><thead><tr><th>Год</th>' + [0, 1].slice(0, n()).map(function (p) { return '<th>' + (S.couple ? esc(nm(p)) + ': вычет' : 'Вычет') + '</th>'; }).join('') +
+        '<th>Остаток</th></tr></thead><tbody>';
+      list.forEach(function (yr) {
+        var left = yr.people.reduce(function (s, pp) { return s + pp.mainLeft + pp.intCarry; }, 0);
+        t += '<tr><td>' + yr.year + '</td>' + yr.people.map(function (pp) { return '<td>' + num(pp.main + pp.interest) + '</td>'; }).join('') + '<td>' + num(left) + '</td></tr>';
+      });
+      return t + '</tbody></table></div>';
+    };
+    var now = rows.filter(function (yr) { return yr.kind !== 'future'; });
+    var later = rows.filter(function (yr) { return yr.kind === 'future'; });
+    if (now.length) html += table(now);
+    if (later.length) html += '<details style="margin:8px 0 0"><summary>Прогноз на ' + later[0].year + '–' + later[later.length - 1].year + ' годы</summary>' + table(later) + '</details>';
+    var endLeft = o.mainLeftEnd.concat(o.intCarryEnd).reduce(function (s, v) { return s + v; }, 0);
+    if (endLeft > 1) html += '<p class="small">Даже к ' + (Y + 15) + ' году останется ' + rub(endLeft) + ' вычета: не хватает дохода.</p>';
+    return html + '</div>';
+  }
+
+  function familyBox(inp) {
+    var kidsNow = Core.familyPayment(inp, Y - 1, 0, 0).kids;
+    if (!S.kids.length) return '';
+    var closed = NOW >= new Date(Y, 9, 2);
+    var ty = closed ? Y : Y - 1;
+    var fp = Core.familyPayment(inp, ty, +S.pm || 0, +S.other || 0);
+    var html = '<div class="box"><h3>Семейная налоговая выплата</h3>';
+    if (!fp.kidsOk) {
+      return html + '<p>Положена работающим родителям, у которых двое и больше детей до 18 лет (или до 23, если учатся очно). У вас таких детей: ' + Math.max(kidsNow, fp.kids) + '.</p></div>';
+    }
+    var win = closed
+      ? 'Приём заявлений за ' + (Y - 1) + ' год закрылся 1 октября ' + Y + '. Следующий — с 1 июня по 1 октября ' + (Y + 1) + ' года по доходам ' + Y + ' года.'
+      : NOW < new Date(Y, 5, 1) ? 'Заявление за ' + (Y - 1) + ' год можно подать в Соцфонд с 1 июня по 1 октября ' + Y + ' года.'
+      : 'Заявления за ' + (Y - 1) + ' год принимают до 1 октября ' + Y + ' года.';
+    html += '<p>' + win + '</p>';
+    var amounts = fp.parts.map(function (v, p) { return (S.couple ? esc(nm(p)) + ': ' : '') + rub(v); }).join(', ');
+    if (fp.incomeOk === null) {
+      html += '<p>Доход семьи за ' + ty + ' год — ' + rub(fp.perCapita) + ' в месяц на человека. Выплата положена, если это не больше полутора прожиточных минимумов вашего региона. Укажите минимум в форме, чтобы проверить.</p>';
+      html += '<p>Если право есть, выплата составит ' + amounts + '. Это налог за ' + ty + ' год, посчитанный без вычетов, минус 6% дохода.</p>';
+    } else if (fp.incomeOk) {
+      html += '<p class="pos">Доход на человека — ' + rub(fp.perCapita) + ' в месяц, это не больше 1,5 прожиточного минимума (' + rub(fp.limit) + '). По доходу выплата положена.</p>';
+      html += '<p>Выплата составит ' + amounts + '. Это налог за ' + ty + ' год, посчитанный без вычетов, минус 6% дохода. Вычеты её не уменьшают: их можно получать одновременно.</p>';
+    } else {
+      html += '<p>Доход на человека — ' + rub(fp.perCapita) + ' в месяц, это больше 1,5 прожиточного минимума (' + rub(fp.limit) + '). Выплата не положена.</p>';
+    }
+    html += '<p class="small">Ещё условия: родители — налоговые резиденты РФ и платят НДФЛ, нет долгов по алиментам, имущество семьи в пределах нормы. Доход считается по всей семье, включая пособия и пенсии.</p>';
+    return html + '</div>';
+  }
+
+  function warnings(c, inp) {
+    var w = [];
+    var y0has = c.opt.years.some(function (yr) { return yr.year === Y0 && yr.refund >= 1; });
+    if (y0has) w.push(['warn', 'Декларацию за ' + Y0 + ' год нужно подать до 31 декабря ' + Y + ' года. После этого вернуть налог за ' + Y0 + ' год не получится.']);
+    var burnt = {};
+    c.opt.burnt.forEach(function (b) {
+      if (b.year > Y) return;
+      var key = b.i + ':' + b.reason;
+      burnt[key] = burnt[key] || { i: b.i, reason: b.reason, amount: 0, year: b.year };
+      burnt[key].amount += b.amount;
+    });
+    Object.keys(burnt).forEach(function (k) {
+      var b = burnt[k], ex = S.exp[b.i];
+      if (b.amount < 1) return;
+      var what = esc(KIND_SHORT[ex.k] + ' · ' + whoLabel(ex.w)) + ', ' + b.year;
+      if (b.reason === 'limit') w.push(['warn', cap(what) + ': ' + rub(b.amount) + ' сверх лимита, их не вернуть. ' + limitHint(ex)]);
+      else if (b.reason === 'tax') w.push(['warn', cap(what) + ': на ' + rub(b.amount) + ' не хватило уплаченного налога. Социальные вычеты на следующий год не переносятся.']);
+      else w.push(['warn', cap(what) + ': ' + whyNot(ex)]);
+    });
+    c.opt.years.forEach(function (yr) {
+      if (yr.kind === 'future') return;
+      yr.people.forEach(function (pp, p) {
+        if (pp.wasted >= 1) w.push(['warn', esc(nm(p)) + ', ' + yr.year + ': вычетов ' + rub(pp.ded) + ' при доходе ' + rub(pp.base) + '. Из них ' + rub(pp.wasted) + ' не дадут возврата: эти расходы может заявить только ' + esc(nm(p)) + '.']);
+      });
+    });
+    var high = [];
+    c.opt.years.forEach(function (yr) {
+      if (yr.kind === 'future' || yr.year < 2025) return;
+      yr.people.forEach(function (pp, p) { if (pp.rateTop > 0.13 && high.indexOf(p) < 0) high.push(p); });
+    });
+    high.forEach(function (p) {
+      if (S.couple) w.push(['', esc(nm(p)) + ': часть дохода облагается по ставке выше 13%. Вычет на эту часть возвращает больше, поэтому калькулятор старается заявлять расходы сюда.']);
+      else w.push(['', 'Часть вашего дохода облагается по ставке выше 13%, и вычет возвращает налог по этой ставке.']);
+    });
+    if (S.couple && c.opt.years.some(function (yr) {
+      return yr.kind !== 'future' && yr.people.some(function (pp, p) {
+        return pp.claims.some(function (cl) { var ex = S.exp[cl.i]; return ex && ex.pay !== p && ex.k !== 'savings'; });
+      });
+    })) {
+      w.push(['', 'Часть расходов заявляет не тот, на кого оформлены документы. Это можно: супруги заявляют расходы на лечение и обучение друг друга и детей. Попросите клинику или учебное заведение выдать справку об оплате по форме ФНС на того, кто будет подавать декларацию.']);
+    }
+    if (YEARS.some(function (y) { return S.miss[0][y] || S.miss[1][y]; })) {
+      w.push(['', 'С 2025 года работодатель даёт детский вычет без заявления. Если его не было, вычет вернут по декларации: он уже учтён в плане.']);
+    }
+    return w;
+  }
+
+  function limitHint(ex) {
+    if (ex.k === 'edu' && ex.w.charAt(0) === 'c') return 'На обучение ребёнка — до ' + num(Core.rules(+ex.y).childEduCap) + ' ₽ в год на обоих родителей.';
+    if (ex.k === 'savings') return 'По ИИС и ПДС — до 400 000 ₽ взносов в год.';
+    return 'Общий лимит на лечение, обучение и спорт — ' + num(Core.rules(+ex.y).socialCap) + ' ₽ в год на человека. Дорогостоящее лечение по перечню правительства лимитом не ограничено.';
+  }
+  function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+  function docsBox(c) {
+    var per = [[], []], decl = [[], []];
+    var add = function (p, s) { if (per[p].indexOf(s) < 0) per[p].push(s); };
+    c.opt.years.forEach(function (yr) {
+      if (yr.kind === 'future') return;
+      yr.people.forEach(function (pp, p) {
+        if (pp.refund < 1 && !pp.claims.length) return;
+        if (pp.ded > 0.5 && pp.refund >= 1) decl[p].push(yr.year);
+        pp.claims.forEach(function (cl) {
+          var k = S.exp[cl.i].k;
+          if (k === 'treat' || k === 'treatExp') add(p, 'Справка об оплате медицинских услуг по форме ФНС (на имя заявителя)');
+          if (k === 'treat') add(p, 'Чеки и рецепты на лекарства, если заявляете их');
+          if (k === 'edu') add(p, 'Справка об оплате образовательных услуг по форме ФНС');
+          if (k === 'sport') add(p, 'Справка об оплате физкультурно-оздоровительных услуг');
+          if (k === 'savings') add(p, 'Справка брокера или НПФ о взносах на ИИС или ПДС');
+          if (S.exp[cl.i].w.charAt(0) === 'c') add(p, 'Свидетельства о рождении детей');
+          if (S.exp[cl.i].w === (p ? 'p0' : 'p1')) add(p, 'Свидетельство о браке');
+        });
+        pp.extra.forEach(function (x) {
+          if (x.type === 'std') add(p, 'Свидетельства о рождении детей');
+          if (x.type === 'gto') add(p, 'Удостоверение к знаку ГТО и документ о диспансеризации');
+        });
+        if (pp.main + pp.interest > 0.5 || pp.intGot > 0.5) {
+          add(p, 'Договор купли-продажи или ДДУ, выписка из ЕГРН или акт приёма-передачи, платёжные документы');
+          if (pp.intGot > 0.5 || pp.interest > 0.5) add(p, 'Кредитный договор и справка банка об уплаченных процентах');
+          if (S.couple && c.opt.mainSplit) add(p, 'Заявление о распределении расходов между супругами и свидетельство о браке');
+        }
+      });
+    });
+    if (!per[0].length && !per[1].length) return '';
+    for (var q = 0; q < 2; q++) {
+      if (!decl[q].length) continue;
+      var ys = decl[q].map(String);
+      var last = ys.pop();
+      per[q].unshift((ys.length ? 'Декларации 3-НДФЛ за ' + ys.join(', ') + ' и ' + last + ' годы' : 'Декларация 3-НДФЛ за ' + last + ' год') + (decl[q].indexOf(Y) >= 0 ? ' (за ' + Y + ' — в ' + (Y + 1) + ' году)' : ''));
+    }
+    var html = '<div class="box"><h3>Что подготовить</h3><div class="docs-grid">';
+    for (var p = 0; p < n(); p++) {
+      if (!per[p].length) continue;
+      html += '<div>' + (S.couple ? '<h4>' + esc(nm(p)) + '</h4>' : '') + '<ul class="docs">' + per[p].map(function (s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ul></div>';
+    }
+    html += '</div><p class="small" style="margin-top:8px">Декларацию проще подать в личном кабинете на nalog.gov.ru или через Госуслуги: многие справки там уже заполнены. Деньги придут на счёт примерно через месяц после камеральной проверки, она длится до трёх месяцев.</p></div>';
+    return html;
+  }
+
+  function summaryText(c) {
+    var lines = ['План налоговых вычетов семьи'];
+    c.opt.years.forEach(function (yr) {
+      if (yr.kind === 'future' || yr.refund < 1) return;
+      lines.push('');
+      lines.push(yr.year + ' (' + whenText(yr) + '): ' + rub(yr.refund));
+      yr.people.forEach(function (pp, p) {
+        var ls = claimsOf(pp);
+        if (!ls.length) return;
+        lines.push('  ' + nm(p) + ': ' + ls.map(function (l) { return l[0] + ' ' + num(l[1]); }).join('; ') + ' → ' + rub(pp.refund));
+      });
+    });
+    if (c.opt.mainSplit && S.couple) lines.push('', 'Распределение основного вычета за жильё: ' + nm(0) + ' — ' + rub(c.opt.mainSplit[0]) + ', ' + nm(1) + ' — ' + rub(c.opt.mainSplit[1]));
+    lines.push('', 'Итого за ' + Y0 + '–' + (Y - 1) + ': ' + rub(c.opt.past));
+    if (c.opt.current >= 1) lines.push('За ' + Y + ' (в ' + (Y + 1) + '): ' + rub(c.opt.current));
+    if (c.opt.future >= 1) lines.push('Остаток за жильё в следующие годы: ' + rub(c.opt.future));
+    lines.push('', 'Расчёт: ' + location.href.split('#')[0]);
+    return lines.join('\n');
+  }
+
+  var lastCompare = null;
+  function render() {
+    save();
+    var inp = toInput();
+    var c = Core.compare(inp);
+    lastCompare = c;
+    var html = '';
+    var anything = c.opt.total >= 1 || c.opt.years.some(function (yr) { return yr.people.some(function (pp) { return pp.claims.length; }); });
+    var who = S.couple ? 'Семья вернёт' : 'Вы вернёте';
+    if (!anything) {
+      html += '<div class="verdict neutral"><h2>Заполните доходы и расходы</h2><p>Здесь появится план: кто какой вычет заявляет за каждый год и сколько вернёт.</p></div>';
+    } else {
+      if (c.opt.past >= 1) html += '<div class="verdict"><h2>' + who + ' ' + rub(c.opt.past) + ' за ' + Y0 + '–' + (Y - 1) + ' годы</h2>';
+      else if (c.opt.current >= 1) html += '<div class="verdict"><h2>' + who + ' ' + rub(c.opt.current) + ' за ' + Y + ' год</h2><p>Декларацию за ' + Y + ' год подают в ' + (Y + 1) + ' году. За ' + Y0 + '–' + (Y - 1) + ' годы при этих данных вернуть нечего.</p>';
+      else html += '<div class="verdict neutral"><h2>За ' + Y0 + '–' + Y + ' годы вернуть нечего</h2>';
+      if (S.couple) {
+        var sooner = (c.opt.past + c.opt.current) - (c.docs.past + c.docs.current);
+        if (c.gain >= 1) html += '<p>Это на <b>' + rub(c.gain) + '</b> больше, чем если каждый заявит расходы по своим документам, а вычет за жильё разделить пополам.</p>';
+        if (sooner - c.gain >= 1000) html += '<p>' + (c.gain >= 1 ? 'А' : 'Сумма почти та же, но') + ' к ' + (Y + 1) + ' году придёт на <b>' + rub(sooner) + '</b> больше: вычет за жильё вернётся быстрее.</p>';
+        else if (c.gain < 1) html += '<p>Распределение почти ничего не меняет: можно подавать по документам.</p>';
+      }
+      var extra = [];
+      if (c.opt.current >= 1 && c.opt.past >= 1) extra.push('за ' + Y + ' год — ещё ' + rub(c.opt.current) + ' в ' + (Y + 1) + ' году');
+      if (c.opt.future >= 1) extra.push('остаток вычета за жильё — ' + rub(c.opt.future) + ' в ' + (Y + 1) + '–' + c.opt.lastPropYear + ' годах');
+      if (extra.length) html += '<p>Дальше: ' + extra.join('; ') + '.</p>';
+      html += '</div>';
+
+      var docsBy = {};
+      c.docs.years.forEach(function (yr) { docsBy[yr.year] = yr; });
+      html += '<div class="box"><h3>План по годам</h3>' + c.opt.years.filter(function (yr) { return yr.kind !== 'future'; }).map(function (yr) { return yearBlock(yr, docsBy[yr.year]); }).join('') + '</div>';
+      html += homeBox(c);
+
+      var w = warnings(c, inp);
+      if (w.length) html += '<div class="box"><h3>На что обратить внимание</h3><ul class="warns">' + w.map(function (x) { return '<li' + (x[0] ? ' class="' + x[0] + '"' : '') + '>' + x[1] + '</li>'; }).join('') + '</ul></div>';
+
+      if (S.couple && c.gain >= 1) {
+        html += '<div class="box"><h3>План и подача по документам</h3><div class="scroll"><table class="years"><thead><tr><th>Год</th><th>По плану</th><th>По документам</th><th>Разница</th></tr></thead><tbody>';
+        var tp = 0, td = 0;
+        c.opt.years.forEach(function (yr) {
+          if (yr.kind === 'future') return;
+          var d = docsBy[yr.year].refund;
+          tp += yr.refund; td += d;
+          html += '<tr><td>' + yr.year + '</td><td>' + num(yr.refund) + '</td><td>' + num(d) + '</td><td class="' + (yr.refund - d >= 1 ? 'pos' : '') + '">' + (Math.abs(yr.refund - d) < 1 ? '—' : (yr.refund > d ? '+' : '−') + num(Math.abs(yr.refund - d))) + '</td></tr>';
+        });
+        var fp = c.opt.future, fd = c.docs.future;
+        if (fp >= 1 || fd >= 1) html += '<tr><td>' + (Y + 1) + ' и дальше</td><td>' + num(fp) + '</td><td>' + num(fd) + '</td><td>' + (Math.abs(fp - fd) < 1 ? '—' : (fp > fd ? '+' : '−') + num(Math.abs(fp - fd))) + '</td></tr>';
+        html += '</tbody><tfoot><tr><td>Всего</td><td>' + num(c.opt.total) + '</td><td>' + num(c.docs.total) + '</td><td class="pos">+' + num(c.gain) + '</td></tr></tfoot></table></div>' +
+          '<p class="small" style="margin-top:8px">«По документам» — каждый расход заявляет тот, кто указан плательщиком, а если ему не позволяет лимит — второй супруг. Жильё и проценты пополам.</p></div>';
+      }
+      html += docsBox(c);
+    }
+    html += familyBox(inp);
+    html += '<div class="box"><h3>Как считали</h3><p class="small">Вычеты уменьшают доход сверху, поэтому возврат идёт по самой высокой ставке, которую платит человек: с 2025 года это 13–22%, раньше 13–15%. Социальные вычеты нельзя перенести на другой год, остаток вычета за жильё переносится. Калькулятор перебирает доли основного вычета за жильё и процентов по годам и раскладывает расходы между супругами так, чтобы вернуть больше, а при равной сумме — раньше. Лимиты берутся по году расходов: общий 120 000 ₽ до 2023 года и 150 000 ₽ с 2024-го, на обучение ребёнка — 50 000 и 110 000 ₽. Не учитываются вычеты, уже полученные у работодателя, благотворительность, продажа имущества и доходы по особым ставкам.</p></div>';
+    if (anything) html += '<div class="actions"><button type="button" data-act="link">Скопировать ссылку с данными</button><button type="button" data-act="text">Скопировать план</button><button type="button" data-act="print">Печать / PDF</button><span class="toast" id="toast"></span></div>';
+    resultsEl.innerHTML = html;
+    resultsEl.dataset.summary = anything ? summaryText(c) : '';
+  }
+
+  var timer = null;
+  function schedule() { clearTimeout(timer); timer = setTimeout(render, 150); }
+
+  // --- Хранение ---
+  function save() { try { localStorage.setItem(STORE_KEY, JSON.stringify(S)); } catch (e) {} }
+  function sane(d) {
+    var b = blank();
+    if (!d || typeof d !== 'object') return null;
+    var s = Object.assign(b, d);
+    s.home = Object.assign(blank().home, d.home || {});
+    ['inc', 'miss', 'gto'].forEach(function (k) {
+      s[k] = [0, 1].map(function (p) { return Object.assign({}, blank()[k][p], (d[k] || [])[p] || {}); });
+    });
+    s.home.int = Object.assign(byYear(0), (d.home || {}).int || {});
+    if (!Array.isArray(s.kids)) s.kids = [];
+    if (!Array.isArray(s.exp)) s.exp = [];
+    s.exp = s.exp.filter(function (x) { return x && YEARS.indexOf(+x.y) >= 0; });
+    return s;
+  }
+  function load() {
+    var m = location.hash.match(/^#d=(.+)$/);
+    if (m) {
+      try { var d = sane(JSON.parse(decodeURIComponent(m[1]))); if (d) return d; } catch (e) {}
+    }
+    try { var l = sane(JSON.parse(localStorage.getItem(STORE_KEY))); if (l) return l; } catch (e) {}
+    return PRESETS.mortgage();
+  }
+
+  function toast(msg) {
+    var el = document.getElementById('toast');
+    if (el) el.textContent = msg;
+  }
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(ta);
+  }
+  function copy(text, okMsg) {
+    var done = function () { toast(okMsg); };
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(done, function () { fallbackCopy(text); done(); });
+    } else {
+      fallbackCopy(text);
+      done();
+    }
+  }
+
+  // --- События ---
+  function readEl(el) {
+    var k = el.dataset.kind;
+    if (k === 'bool') return el.checked;
+    if (k === 'money') return Math.max(0, parseNum(el.value));
+    if (k === 'num') return parseNum(el.value);
+    if (k === 'int') return parseInt(el.value, 10) || 0;
+    return el.value;
+  }
+
+  form.addEventListener('input', function (ev) {
+    var el = ev.target;
+    if (!el.dataset.path || el.tagName === 'SELECT' || el.type === 'checkbox') return;
+    setPath(el.dataset.path, readEl(el));
+    schedule();
+  });
+
+  form.addEventListener('change', function (ev) {
+    var el = ev.target;
+    if (!el.dataset.path || (el.tagName === 'SELECT' && el.value === '')) return;
+    setPath(el.dataset.path, readEl(el));
+    var path = el.dataset.path;
+    if (/^exp\.\d+\.k$/.test(path)) {
+      var ex = getPath(path.replace(/\.k$/, ''));
+      var allowed = whoOptions(ex.k).map(function (o) { return o[0]; });
+      if (allowed.indexOf(ex.w) < 0) ex.w = allowed[0];
+    }
+    if (el.dataset.struct || /^kids\./.test(path)) renderForm();
+    else if (el.dataset.kind === 'money' && el.value) el.value = num(readEl(el));
+    render();
+  });
+
+  form.addEventListener('click', function (ev) {
+    var b = ev.target.closest('[data-act]');
+    if (!b) return;
+    var act = b.dataset.act, i = +b.dataset.i;
+    if (act === 'couple') {
+      S.couple = b.dataset.v === '1';
+      if (!S.couple) S.exp.forEach(function (ex) {
+        if (ex.w === 'p1') ex.w = 'p0';
+        if (/1$/.test(ex.w) && ex.w.charAt(0) !== 'c') ex.w = ex.w.replace(/1$/, '0');
+        ex.pay = 0;
+      });
+    }
+    if (act === 'addKid') S.kids.push({ born: 0, study: 0, dis: false });
+    if (act === 'delKid') {
+      S.kids.splice(i, 1);
+      S.exp.forEach(function (ex) {
+        if (ex.w.charAt(0) !== 'c') return;
+        var j = +ex.w.slice(1);
+        if (j === i) ex.w = S.kids.length ? 'c0' : 'p0';
+        else if (j > i) ex.w = 'c' + (j - 1);
+      });
+    }
+    if (act === 'addExp') {
+      var last = S.exp[S.exp.length - 1];
+      S.exp.push({ y: last ? last.y : Y - 1, k: 'treat', w: S.kids.length ? 'c0' : 'p0', a: 0, pay: 0, ft: true });
+    }
+    if (act === 'delExp') S.exp.splice(i, 1);
+    renderForm();
+    render();
+    if (act === 'addExp') {
+      var inputs = form.querySelectorAll('[data-path="exp.' + (S.exp.length - 1) + '.a"]');
+      if (inputs[0]) inputs[0].focus();
+    }
+  });
+
+  document.querySelector('.presets').addEventListener('click', function (ev) {
+    var name = ev.target.dataset.preset;
+    if (!name) return;
+    S = PRESETS[name]();
+    if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+    renderForm();
+    render();
+  });
+
+  resultsEl.addEventListener('click', function (ev) {
+    var act = ev.target.dataset.act;
+    if (act === 'print') window.print();
+    if (act === 'link') copy(location.href.split('#')[0] + '#d=' + encodeURIComponent(JSON.stringify(S)), 'Ссылка скопирована');
+    if (act === 'text') copy(resultsEl.dataset.summary || '', 'План скопирован');
+  });
+
+  document.querySelector('footer').addEventListener('click', function (ev) {
+    if (!('themeSet' in ev.target.dataset)) return;
+    var t = ev.target.dataset.themeSet;
+    if (t) document.documentElement.setAttribute('data-theme', t);
+    else document.documentElement.removeAttribute('data-theme');
+    try { localStorage.setItem(STORE_KEY + '-theme', t); } catch (err) {}
+  });
+
+  try {
+    var savedTheme = localStorage.getItem(STORE_KEY + '-theme');
+    if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
+  } catch (err) {}
+
+  document.getElementById('notice').textContent = 'В ' + Y + ' году можно вернуть налог за ' + Y0 + ', ' + (Y0 + 1) + ' и ' + (Y0 + 2) + ' годы. ' +
+    'Срок для ' + Y0 + ' года заканчивается 31 декабря ' + Y + '. Расходы ' + Y + ' года заявляют в ' + (Y + 1) + ' году.';
+  S = load();
+  renderForm();
+  render();
+})();
+</script>
+</body>
+</html>
